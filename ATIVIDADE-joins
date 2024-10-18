@@ -1,0 +1,86 @@
+create database empresa;
+
+create table departamento (
+	id int auto_increment primary key not null,
+    nome varchar(255) not null
+);
+
+create table funcionario (
+	id int auto_increment primary key not null,
+    salario decimal(10,2) not null,
+    nome varchar(100) not null,
+    id_departamento int,
+    foreign key (id_departamento) references departamento(id)
+);
+
+create table dependente (
+	id int auto_increment primary key not null,
+    nome varchar(100) not null,
+    id_funcionario int,
+    foreign key (id_funcionario) references funcionario (id)
+);
+
+insert into departamento (nome)
+values ("Financeiro"),
+	   ("RH"),
+	   ("TI"),
+       ("Marketing"),
+       ("Vendas");
+       
+insert into funcionario (salario, nome, id_departamento)
+values (4500.00, "Ana", 1),  
+	   (5200.00, "Carlos", 2),  
+	   (6000.00, "João", 3),  
+	   (4000.00, "Mariana", 4),  
+	   (3500.00, "Pedro", 5);  
+
+
+insert into dependente (nome, id_funcionario)
+values ("Danielle", 1),
+	   ("Silvia", 2),
+	   ("Vanessa", 3),
+       ("Fábio", 4),
+       ("Thiago", 5);
+
+#1
+select funcionario.nome, count(dependente.id) as quantidade_dependentes
+from funcionario 
+left join dependente on funcionario.id = dependente.id_funcionario
+group by funcionario.nome
+having count(dependente.id) > 2;
+
+#2
+select departamento.nome as departamento, funcionario.nome as funcionario
+from departamento
+left join funcionario on departamento.id = funcionario.id_departamento
+order by departamento.nome, funcionario.nome;
+
+#3
+select funcionario.nome as funcionario,
+count(dependente.id) as total_dependentes
+from funcionario
+left join dependente on funcionario.id = dependente.id_funcionario
+group by funcionario.id, funcionario.nome;
+
+#4
+select departamento.nome as departamento, avg(funcionario.salario) as media_salarial
+from departamento
+left join funcionario on departamento.id = funcionario.id_departamento
+group by departamento.id, departamento.nome;
+
+#5
+select departamento.nome as departamento,
+count(funcionario.id) as total_funcionarios
+from departamento
+left join funcionario on departamento.id = funcionario.id_departamento
+group by departamento.id, departamento.nome;
+
+#6
+select sum(funcionario.salario) as total_salarios
+from funcionario;
+
+#7
+select departamento.nome as departamento, sum(funcionario.salario) as custo_setor
+from departamento
+left join funcionario on departamento.id = funcionario.id_departamento
+group by departamento.id, departamento.nome;
