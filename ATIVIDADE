@@ -1,0 +1,55 @@
+#CRIAR UMA VIEW 18/10
+create view vw_lista_funcionarios as
+select nome, especialidade
+from funcionarios;
+
+#UTILIZANDO A VIEW CRIADA
+select * from vw_lista_funcionarios;
+
+#CRIANDO UMA VIEW PARA LISTAR TODOS OS DEPENDENTES
+create view vw_lista_dependentes as
+select nome 
+from dependentes;
+
+#create viwe inner join
+create view vw_funcionario_com_dependentes as
+select funcionarios.cod, dependentes.nome
+from funcionarios
+inner join dependentes
+on funcionarios.cod = dependentes.cod_func;
+
+select * from vw_funcionario_com_dependentes;
+
+#create view left join
+create view vw_funcionarios_dependentes as
+select funcionarios.nome as funcionario_nome, dependentes.nome as dependente_nome
+from funcionarios
+left join dependentes on funcionarios.cod = dependentes.cod_func;
+
+select * from vw_funcionarios_dependentes;
+
+#create view left excluding join
+create view vw_funcionarios_sem_dependentes as
+select funcionarios.nome as funcionario_nome, dependentes.nome as dependente_nome
+from funcionarios
+left join dependentes on funcionarios.cod = dependentes.cod_func
+where dependentes.nome is null;
+
+select * from vw_funcionarios_sem_dependentes;
+
+#create view right join
+create view vw_dependentes_funcionarios as
+select funcionarios.nome as funcionario_nome, dependentes.nome as dependente_nome
+from funcionarios
+right join dependentes on funcionarios.cod = dependentes.cod_func;
+
+select * from vw_dependentes_funcionarios;
+
+#create view right excluding join
+create view vw_dependentes_sem_funcionarios as
+select funcionarios.nome as funcionario_nome, dependentes.nome as dependente_nome
+from funcionarios
+right join dependentes on funcionarios.cod = dependentes.cod_func
+where funcionarios.cod is null;
+
+select * from vw_dependentes_sem_funcionarios;
